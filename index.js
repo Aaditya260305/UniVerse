@@ -13,7 +13,7 @@ const Announ = require("./models/Announcement");
 const personal_user  = require('./models/PersonalDetails')
 
 // Routes importing 
-const userRoute = require("./routes/user");
+const userRoute = require("./routes/signup_login");
 
 const app = express();
 const port = 5000;
