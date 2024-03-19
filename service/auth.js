@@ -8,7 +8,7 @@ function getUser(id) {
     return sessionIdToUserMap.get(id);
 }
 
-async function checking_login(req,res,uid){
+function checking_login(req,res,uid){
     console.log(uid)
     console.log(sessionIdToUserMap.has(uid))
     if (sessionIdToUserMap.has(uid)){
@@ -20,9 +20,16 @@ async function checking_login(req,res,uid){
     }
 }
 
+function remove_uuid(uid){
+    if(sessionIdToUserMap.has(uid))sessionIdToUserMap.delete(key)
+    // console.log(sessionIdToUserMap)
+    return;
+}
+
 
 module.exports = {
     setUser,
     getUser,
     checking_login,
+    remove_uuid,
 };
