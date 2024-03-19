@@ -14,6 +14,7 @@ const personal_user  = require('./models/PersonalDetails')
 
 // Routes importing 
 const userRoute = require("./routes/signup_login");
+const {checking_login} = require('./service/auth')
 
 const app = express();
 const port = 5000;
@@ -45,19 +46,29 @@ app.use(cookieParser());
 app.use("/signup", userRoute);
 
 // HOME PAGE ROUTE
-app.get("/home_page", (req, res) => {});
+// app.get("/home_page", (req, res) => {});
 
 // ROUTE THAT SHOW THE COURSES FOR THE STUDENT FOR THE SEMESTER HE CHOOSES ASSUMED DEPARTMENT IS RETRIVED AND SEND IN BODY
 app.get("/semester", (req, res) => {
-  Course.find({ department: req.body.department, semester: req.body.semester })
-    .then((foundCourses) => {
-      res.json(foundCourses);
-      console.log(foundCourses);
-    })
-    .catch((error) => {
-      console.error("Error retrieving courses:", error);
-      res.status(500).send("Error retrieving courses");
-    });
+
+  var uid = req.cookies?.uid
+  console.log(uid)
+
+  if(uid && checking_login(req,res,uid)){
+    Course.find({ department: req.body.department, semester: req.body.semester })
+      .then((foundCourses) => {
+        res.json(foundCourses);
+        console.log(foundCourses);
+      })
+      .catch((error) => {
+        console.error("Error retrieving courses:", error);
+        res.status(500).send("Error retrieving courses");
+      });
+  }
+  else{
+    res.status(200).json("you have not login yet")
+  }
+
 });
 
 // NOT USED NOW BUT MAY BE USED
@@ -140,7 +151,7 @@ app.get("/pdf/:course", (req, res) => {
 });
 
 // user can get file with filename coming from the frontend
-app.get("/pdf/:filename", (req, res) => {
+app.get("course/pdf/:filename", (req, res) => {
   const fileName = req.params.filename;
   console.log(fileName);
   const filePath = path.join(__dirname, "uploads", fileName);

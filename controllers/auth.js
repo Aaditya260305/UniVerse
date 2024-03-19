@@ -1,13 +1,13 @@
 //for signup of users
 const { v4: uuidv4 } = require("uuid")
-const User = require("../models/PersonalDetails")
+const personal_user = require("../models/PersonalDetails")
 const { setUser } = require("../service/auth")
 
 
 async function UserSignup(req, res) {
     try {
         const { name, rollNo, email, age, gender, password } = req.body;
-        await User.create({
+        await personal_user.create({
             name,
             rollNo,
             email,
@@ -27,8 +27,7 @@ async function UserSignup(req, res) {
 }
 
 async function UserLogin(req, res) {
-    const { rollNo, password } = req.body;
-    const user = await User.findOne({ rollNo, password });
+    const user = await personal_user.findOne({ rollNo : req.body.rollNo, password:req.body.password });
     if (!user) {
         console.log("Incorrect rollNo or password.");
         return res.json({ message: "Incorrect rollNo or password." })
