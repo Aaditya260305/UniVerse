@@ -10,7 +10,6 @@ function getUser(id) {
 
 async function checking_login(req,res,uid){
     console.log(uid)
-    console.log(sessionIdToUserMap.get(uid))
     console.log(sessionIdToUserMap.has(uid))
     if (sessionIdToUserMap.has(uid)){
         req.user =sessionIdToUserMap.get(uid)
