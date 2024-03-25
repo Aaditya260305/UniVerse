@@ -21,11 +21,10 @@ function checking_login(req,res,uid){
 }
 
 function remove_uuid(uid){
-    if(sessionIdToUserMap.has(uid))sessionIdToUserMap.delete(key)
-    // console.log(sessionIdToUserMap)
+    if(sessionIdToUserMap.has(uid)) sessionIdToUserMap.delete(uid)
+    console.log(sessionIdToUserMap)
     return;
 }
-
 
 module.exports = {
     setUser,

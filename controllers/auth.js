@@ -27,6 +27,7 @@ async function UserSignup(req, res) {
 }
 
 async function UserLogin(req, res) {
+    console.log(req.body);
     const user = await personal_user.findOne({ rollNo : req.body.rollNo, password:req.body.password });
     if (!user) {
         console.log("Incorrect rollNo or password.");
