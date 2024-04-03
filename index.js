@@ -11,6 +11,8 @@ const add_course_route = require('./routes/add_some_courses')
 const pdf_route = require('./routes/pdf_in_course')
 const announcement_route = require('./routes/announcement')
 const signout_route = require('./routes/singout')
+const result_route = require('./routes/result')
+const individual_course = require('./routes/gpa_for_courses')
 
 // middlleware importing
 const {check_login} = require('./middlewares/check_for_login')
@@ -21,8 +23,9 @@ const port = 5000;
 // mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 // MAKING CONNNECTION WITH DATABASE
+// .connect("mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 mongoose
-  .connect("mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  .connect("mongodb://127.0.0.1:27017/UniVerse")
   .then(console.log("database connected"))
   .catch((err) => console.log(err.message));
 
@@ -45,6 +48,12 @@ app.use("/course/pdf", check_login , pdf_route)
 
 // announcement route
 app.use('/announcements' , check_login ,announcement_route)
+
+// result for overall semester
+app.use('/result', result_route);
+
+// result for some course 
+app.use('/result/course', individual_course)
 
 // signout route
 app.use('/signout', check_login ,signout_route)
