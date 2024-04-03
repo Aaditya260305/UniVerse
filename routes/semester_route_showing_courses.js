@@ -12,10 +12,21 @@ const router = express.Router();
 router.get('/', (req, res) => {
 
     var uid = req.cookies?.uid
-    console.log(uid)
-  
-    if(uid && checking_login(req,res,uid)){
-      Course.find({ department: req.body.department, semester: req.body.semester })
+    // console.log(uid)
+    // console.log("--------------------------------&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-----------------------")
+    // console.log(req.user)
+
+
+    var dept="";
+    var temp = req.user.rollNo[0] + req.user.rollNo[1] + req.user.rollNo[2] ; 
+    console.log(temp)
+
+    if(temp=="iib" || temp == "iit"){dept="IT";}
+    if(temp=="iec"){dept= "ECE";}
+
+    if(checking_login(req,res,uid)){
+
+      Course.find({ department: dept, semester: req.body.semester })
         .then((foundCourses) => {
           res.json(foundCourses);
           console.log(foundCourses);

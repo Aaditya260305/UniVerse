@@ -50,7 +50,7 @@ app.use("/course/pdf", check_login , pdf_route)
 app.use('/announcements' , check_login ,announcement_route)
 
 // result for overall semester
-app.use('/result', result_route);
+app.use('/result', result_route)
 
 // result for some course 
 app.use('/result/course', individual_course)

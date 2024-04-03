@@ -1,21 +1,18 @@
 const { getUser } = require("../service/auth");
+const {checking_login} = require('../service/auth')
 
-async function check_login(req, res, next) {
-    const userUid = req.cookies.uid;
-
-    if (!userUid) {
-        console.log("Go back to login page");
-        res.end();
-    }//Redirect to login page
-
-    if (!getUser(userUid)) {
-        console.log("Go back to Login page");
-        res.end();
+const check_login = (req, res, next) => {
+    const sessionId = req.cookies.uid;
+    
+    if(checking_login(req,res,sessionId)){
+        // req.user = getUser(sessionId);
+        console.log(req.user);
+        next(); 
     }
-
-    req.user = getUser(userUid);
-    next();
-}
+    else{
+        res.status(401).send('Invalid session');
+    }
+};
 
 module.exports = {
     check_login,
