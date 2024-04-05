@@ -12,13 +12,20 @@ const sem_result_all = require('../models/result_according_to_semester');
 
 
 router.get('/',async (req,res)=>{
-    const roll = req.body.rollNo;
+    const roll = req.user.rollNo;
     const sem_no = req.body.semester;
 
     try {
-        const data = await sem_result_all.find({rollNo:roll , semester:sem_no});
-        console.log(data[0]);
-        res.status(201).json({sgpa:data[0].sgpa});
+        data = await sem_result_all.find({rollNo:roll , semester:sem_no});
+        if (typeof data === 'undefined') {
+            console.log('The variable is undefined');
+            res.status(201).json({sgpa: "not uploaded"});
+        } 
+        else{
+            console.log(data[0]);
+            sgpa = data[0].sgpa;
+            res.status(201).json({sgpa: sgpa});
+        }
     }
     catch (error) {
         console.log(error)
@@ -38,9 +45,9 @@ router.post('/' , async(req,res)=>{
 
     try {
         const result_to_add = new sem_result_all({
-            rollNo : req.body.rollNo,
-            semester : req.body.semester,
-            sgpa : req.body.sgpa,
+            rollNo : roll,
+            semester : sem_no,
+            sgpa : sgpa,
         });
         await result_to_add.save();
 

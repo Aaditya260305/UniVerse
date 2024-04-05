@@ -28,17 +28,27 @@ mongoose
   .connect("mongodb://127.0.0.1:27017/UniVerse")
   .then(console.log("database connected"))
   .catch((err) => console.log(err.message));
+  
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 
 // MIDDLEWARE FOR PARSING DATA INTO UNDERSTANDABLE FORM BY SERVER
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+
 // LOGIN ROUTE
 app.use("/signup", userRoute);
 
 // ROUTE THAT SHOW THE COURSES FOR THE STUDENT FOR THE SEMESTER HE CHOOSES ASSUMED DEPARTMENT IS RETRIVED AND SEND IN BODY
-app.use('/semester',check_login , semester_route);
+app.use('/semester', check_login , semester_route);
 
 // ADD SOME COURSES
 app.use('/add_courses', check_login , add_course_route )
@@ -50,10 +60,10 @@ app.use("/course/pdf", check_login , pdf_route)
 app.use('/announcements' , check_login ,announcement_route)
 
 // result for overall semester
-app.use('/result', result_route)
+app.use('/result', check_login , result_route)
 
 // result for some course 
-app.use('/result/course', individual_course)
+app.use('/result/course', check_login , individual_course)
 
 // signout route
 app.use('/signout', check_login ,signout_route)

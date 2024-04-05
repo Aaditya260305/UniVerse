@@ -10,7 +10,7 @@ const individual_course_result = require('../models/individual_courses_result');
 // individual course ka gpa
 
 router.get('/',async (req,res)=>{
-    const roll = req.body.rollNo;
+    const roll = req.user.rollNo;
     const course = req.body.course;
 
     try {
