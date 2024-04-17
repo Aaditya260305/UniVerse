@@ -13,6 +13,7 @@ const announcement_route = require('./routes/announcement')
 const signout_route = require('./routes/singout')
 const result_route = require('./routes/result')
 const individual_course = require('./routes/gpa_for_courses')
+const link_route = require('./routes/links_adding')
 
 // middlleware importing
 const {check_login} = require('./middlewares/check_for_login')
@@ -53,8 +54,11 @@ app.use('/semester', check_login , semester_route);
 // ADD SOME COURSES
 app.use('/add_courses', check_login , add_course_route )
 
-// only admin can ADD PDF in the courses
+// only admin can ADD PDF in the notes section courses
 app.use("/course/pdf", check_login , pdf_route)
+
+// admin to add links through the link section 
+app.use("/course/links" , check_login ,  link_route )
 
 // announcement route
 app.use('/announcements' , check_login ,announcement_route)

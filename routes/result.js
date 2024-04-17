@@ -10,7 +10,6 @@ const sem_result_all = require('../models/result_according_to_semester');
 
 // overall semester ki cgpa ke liye 
 
-
 router.get('/',async (req,res)=>{
     const roll = req.user.rollNo;
     const sem_no = req.body.semester;

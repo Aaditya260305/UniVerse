@@ -123,8 +123,6 @@ router.delete("/delete", async (req, res) => {
         res.status(500).json({ message: 'Failed to remove occurrences of the string from the notes array', error: error.message });
       }
 
-
-
     } catch (error) {
       // Failed to delete the file
       console.log(error.message)
