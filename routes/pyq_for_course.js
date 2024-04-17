@@ -19,10 +19,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// BASE ADDRESS ---- /course/pdf
+// BASE ADDRESS ---- /course/pyq
 
-// pdf uploading
-router.post("/upload_pdf", upload.single("file_pdf"), async (req, res) => {
+// pyq uploading
+router.post("/upload_pyq", upload.single("file"), async (req, res) => {
   console.log(req.file);
   console.log(req.file.path);
   // res.json(req.file.originalname)
@@ -35,17 +35,17 @@ router.post("/upload_pdf", upload.single("file_pdf"), async (req, res) => {
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
-
-    // Add file locations to the notes array
-    course[0].notes.push(req.file.path);
+    
+    // Add file locations to the pyq array
+    course[0].pyq.push(req.file.path);
     await course[0].save();
     res.status(200).json({
-      message: "File locations added to notes array successfully",
+      message: "File locations added to pyq array successfully",
       course,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Failed to add file locations to notes array",
+      message: "Failed to add file locations to pyq array",
       error: error.message,
     });
   }
@@ -54,10 +54,11 @@ router.post("/upload_pdf", upload.single("file_pdf"), async (req, res) => {
 // getting list/names of all files under pdf section under some specific course
 router.get("/", (req, res) => {
   var course = req.body.course;
+  console.log(course)
   Course.find({ title: course })
-    .then((foundpdf) => {
+    .then((foundpyq) => {
       var reply = [];
-      var note = foundpdf[0].notes;
+      var note = foundpyq[0].pyq;
       for (i = 0; i < note.length; i++) {
         reply.push(path.basename(note[i]));
       }
@@ -71,7 +72,7 @@ router.get("/", (req, res) => {
 
 
 // user can get file with filename coming from the frontend
-router.get("/files", async (req, res) => {
+router.get("/files", async(req, res) => {
   const fileName = req.body.filename;
   console.log(fileName);
 
@@ -81,12 +82,14 @@ router.get("/files", async (req, res) => {
   // only pdf file can be loaded not others
 
   const exists = await fs.pathExists(filePath);
-  if (!exists) {
-      return res.status(404).json({ message: "File not found" });
-  }
-
+    if (!exists) {
+        return res.status(404).json({ message: "File not found" });
+    }
 
   var data = fs.readFileSync(filePath);
+
+    console.log(data)
+
   res.contentType("application/pdf");
   res.send(data);
   res.end();
@@ -108,26 +111,26 @@ router.delete("/delete", async (req, res) => {
       await fs.unlink(filePath);
 
 
-      const stringToRemove = "uploads\\"+fileName; // The string to remove from the notes array
+      const stringToRemove = "uploads\\"+fileName; // The string to remove from the pyq array
       console.log(stringToRemove)
 
-      try {        // Update the course document to remove all occurrences of the specified string from the notes array
+      try {        // Update the course document to remove all occurrences of the specified string from the pyq array
         const course = await Course.findOne({ title: req.body.course });
 
           if (!course) {
             return res.status(404).json({ message: 'Course not found' });
           }
 
-          // Remove all occurrences of the specified string from the notes array
-          course.notes = course.notes.filter(note => note !== stringToRemove);
+          // Remove all occurrences of the specified string from the pyq array
+          course.pyq = course.pyq.filter(note => note !== stringToRemove);
 
           // Save the updated course document
           await course.save();
 
-          res.status(200).json({ message: 'Occurrences of the string removed from the notes array', course });
+          res.status(200).json({ message: 'Occurrences of the string removed from the pyq array', course });
         } 
       catch (error) {
-        res.status(500).json({ message: 'Failed to remove occurrences of the string from the notes array', error: error.message });
+        res.status(500).json({ message: 'Failed to remove occurrences of the string from the pyq array', error: error.message });
       }
 
     } catch (error) {
