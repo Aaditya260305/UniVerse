@@ -11,7 +11,7 @@ function check_if_teacher_or_admin(req){
 }
 
 // power given only to admin to add courses
-router.post("/", async (req, res) => {
+router.post("/" , async (req, res) => {
   if(check_if_teacher_or_admin(req)){
     try {
       console.log(req.body);

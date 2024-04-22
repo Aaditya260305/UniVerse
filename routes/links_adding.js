@@ -15,8 +15,13 @@ router.get("/", (req, res) => {
     .then((foundlinks) => {
       var reply = [];
       var note = foundlinks[0].links;
+
+      console.log(note);
+      console.log(note.length)
+
       for (i = 0; i < note.length; i++) {
         reply.push(note[i]);
+        console.log(note[i]);
       }
       res.json(reply);
     })
@@ -28,6 +33,7 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   const link_add = req.body.link_address;
+  const name_of_video = req.body.name_of_video;
 
   if (check_if_teacher_or_admin(req)) {
     try {
@@ -37,10 +43,12 @@ router.post("/", async (req, res) => {
       }
 
       // Add file locations to the notes array
-      course[0].links.push(link_add);
+      const myObj = {"name_of_video": name_of_video , "link":link_add};
+      const myJSON = JSON.stringify(myObj);
+      course[0].links.push(myJSON);
       await course[0].save();
       res.status(200).json({
-        message: "File locations added to notes array successfully",
+        message: "File locations added to links array successfully",
         course,
       });
     } catch (error) {
@@ -55,8 +63,12 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
+  const name_of_video = req.body.name_of_video;
   const stringToRemove = req.body.link_address;
   // console.log(stringToRemove)
+
+  const myObj = {"name_of_video": name_of_video , "link":stringToRemove};
+  const myJSON = JSON.stringify(myObj);
 
   if (check_if_teacher_or_admin(req)) {
     try {
@@ -68,7 +80,7 @@ router.delete("/", async (req, res) => {
       }
 
       // Remove all occurrences of the specified string from the notes array
-      course.links = course.links.filter((note) => note !== stringToRemove);
+      course.links = course.links.filter((link) => link !== myJSON);
 
       // console.log(course.notes)
 

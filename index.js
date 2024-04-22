@@ -22,14 +22,14 @@ const {check_login} = require('./middlewares/check_for_login')
 const {check_admin} = require('./middlewares/check_type')
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 // MAKING CONNNECTION WITH DATABASE
-// .connect("mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+// .connect("mongodb://127.0.0.1:27017/UniVerse")
 mongoose
-  .connect("mongodb://127.0.0.1:27017/UniVerse")
+.connect("mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(console.log("database connected"))
   .catch((err) => console.log(err.message));
   

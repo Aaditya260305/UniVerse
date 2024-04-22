@@ -9,7 +9,7 @@ const course = mongoose.Schema({
     links : [String],
     pyq : [String]
 })
-
+    
 const Course = mongoose.model('course', course )
 module.exports= Course  
 
