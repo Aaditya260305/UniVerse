@@ -7,6 +7,10 @@ const fs = require("fs-extra");
 //model
 const Course = require("../models/course");
 
+function check_if_teacher_or_admin(req){
+  return req.user.type==="admin" || req.user.type==="teacher";
+}
+
 // finding and application
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,6 +27,12 @@ const upload = multer({ storage: storage });
 
 // pyq uploading
 router.post("/upload_pyq", upload.single("file"), async (req, res) => {
+
+  if(check_if_teacher_or_admin(req)===false){
+    return res.status(401).send("not an admin or a teacher");
+}
+
+
   console.log(req.file);
   console.log(req.file.path);
   // res.json(req.file.originalname)
@@ -102,6 +112,11 @@ router.delete("/delete", async (req, res) => {
     const fileName = req.body.filename;
     const filePath = path.join('./uploads', fileName);
     console.log(filePath);
+
+    if(check_if_teacher_or_admin(req)===false){
+      return res.status(401).send("not an admin or a teacher");
+    }
+
   
     try {
       const exists = await fs.pathExists(filePath);

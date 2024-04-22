@@ -20,9 +20,10 @@ async function UserSignup(req, res) {
         return res.json({ message: "User Signup Successful." });
     }
     catch (error) {
+        console.log(error);
         console.log("User Signup Failed.");
         //redirect to Login Page
-        return res.json({ message: "User Signup Failed." });
+        return res.json({ message: "User Signup Failed. entry of same roll number and email is present" });
     }
 }
 

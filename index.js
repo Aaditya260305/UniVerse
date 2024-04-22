@@ -15,12 +15,14 @@ const result_route = require('./routes/result')
 const individual_course = require('./routes/gpa_for_courses')
 const link_route = require('./routes/links_adding')
 const pyq_route = require('./routes/pyq_for_course')
+const admin_route = require('./routes/admin_to_admin')
 
 // middlleware importing
 const {check_login} = require('./middlewares/check_for_login')
+const {check_admin} = require('./middlewares/check_type')
 
 const app = express();
-const port = 5000;
+const port = 3000;
 
 // mongodb+srv://iib2022038:acKZwVv2fnUYcNDT@cluster0.0ouumue.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
@@ -39,7 +41,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // MIDDLEWARE FOR PARSING DATA INTO UNDERSTANDABLE FORM BY SERVER
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -48,6 +49,9 @@ app.use(cookieParser());
 
 // LOGIN ROUTE
 app.use("/signup", userRoute);
+
+// routes to make someone teacher / admin 
+app.use('/admin', check_login ,check_admin ,admin_route);
 
 // ROUTE THAT SHOW THE COURSES FOR THE STUDENT FOR THE SEMESTER HE CHOOSES ASSUMED DEPARTMENT IS RETRIVED AND SEND IN BODY
 app.use('/semester', check_login , semester_route);

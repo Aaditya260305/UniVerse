@@ -10,6 +10,10 @@ const sem_result_all = require('../models/result_according_to_semester');
 
 // overall semester ki cgpa ke liye 
 
+function check_if_teacher_or_admin(req){
+    return req.user.type==="admin" || req.user.type==="teacher";
+}
+
 router.get('/',async (req,res)=>{
     const roll = req.user.rollNo;
     const sem_no = req.body.semester;
@@ -37,6 +41,10 @@ router.post('/' , async(req,res)=>{
     const roll = req.body.rollNo;
     const sem_no = req.body.semester;
     const sgpa = req.body.sgpa ; 
+
+    if(check_if_teacher_or_admin(req)===false){
+        return res.status(401).send("not an admin or a teacher");
+    }
 
     console.log(roll)
     console.log(sem_no)
